@@ -1,42 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FX Converter</title>
-  </head>
-  <body>
-    <main class="app">
-      <header>
-        <h1>FX Rate Lookup and Converter</h1>
-        <p>Data source: open.er-api.com (no API key required)</p>
-      </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FX Converter</title>
+</head>
+<body>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-      <section class="panel">
+  <main class="app">
+    <header class="hero">
+      <p class="hero-kicker">Realtime Currency Utility</p>
+      <h1>FX Converter</h1>
+      <p class="hero-subtitle">Exchange rates powered by open.er-api.com</p>
+    </header>
+
+    <section class="panel" id="panel">
+      <div class="field">
+        <label for="amount">Amount</label>
+        <input id="amount" type="number" min="0" step="0.01" value="1" />
+      </div>
+
+      <div class="row">
         <div class="field">
-          <label for="amount">Amount</label>
-          <input id="amount" type="number" min="0" step="0.01" value="1" />
+          <label for="from">From</label>
+          <select id="from"></select>
         </div>
 
-        <div class="row">
-          <div class="field">
-            <label for="from">From</label>
-            <select id="from"></select>
-          </div>
-          <button id="swap" type="button" aria-label="Swap currency">Swap</button>
-          <div class="field">
-            <label for="to">To</label>
-            <select id="to"></select>
-          </div>
+        <button id="swap" type="button" aria-label="Swap currencies">⇄</button>
+
+        <div class="field">
+          <label for="to">To</label>
+          <select id="to"></select>
         </div>
+      </div>
 
-        <button id="convert" type="button">Convert</button>
+      <button id="convert" type="button" class="btn-convert">Convert</button>
 
+      <div class="result-wrap">
         <div class="result" id="result" role="status" aria-live="polite"></div>
         <div class="meta" id="meta"></div>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
 
-    <script type="module" src="/src/main.js"></script>
-  </body>
+  <script type="module" src="/src/main.js"></script>
+</body>
 </html>
