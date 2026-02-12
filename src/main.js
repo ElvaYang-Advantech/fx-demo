@@ -39,10 +39,7 @@ async function loadCurrencies() {
   const symbols = await getSupportedCurrencies();
   const entries = Object.entries(symbols)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([code, item]) => ({
-      code,
-      description: item.description
-    }));
+    .map(([code, description]) => ({ code, description }));
 
   const options = entries
     .map(({ code, description }) => `<option value="${code}">${code} - ${description}</option>`)
@@ -77,7 +74,7 @@ async function runConvert() {
     resultEl.textContent = `${formatCurrency(amount, from)} = ${formatCurrency(converted.result, to)}`;
     metaEl.textContent = `1 ${from} = ${latest.rate} ${to} | 匯率日期：${latest.date}`;
   } catch (error) {
-    renderError(error.message);
+    renderError(error instanceof Error ? error.message : String(error));
   } finally {
     setLoading(false);
   }
@@ -99,4 +96,4 @@ amountInput.addEventListener('keydown', (event) => {
 
 loadCurrencies()
   .then(runConvert)
-  .catch((error) => renderError(error.message));
+  .catch((error) => renderError(error instanceof Error ? error.message : String(error)));

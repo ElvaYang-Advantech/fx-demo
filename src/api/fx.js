@@ -1,4 +1,4 @@
-const API_BASE = 'https://api.exchangerate.host';
+const API_BASE = 'https://api.frankfurter.app';
 
 async function fetchJson(path, params = {}) {
   const url = new URL(`${API_BASE}${path}`);
@@ -13,24 +13,18 @@ async function fetchJson(path, params = {}) {
     throw new Error(`API request failed: ${response.status}`);
   }
 
-  const data = await response.json();
-  if (data && data.success === false) {
-    const info = data.error?.info || 'Unknown API error';
-    throw new Error(info);
-  }
-
-  return data;
+  return response.json();
 }
 
 export async function getSupportedCurrencies() {
-  const data = await fetchJson('/symbols');
-  return data.symbols || {};
+  return fetchJson('/currencies');
 }
 
 export async function getLatestRate(base, target) {
   const data = await fetchJson('/latest', {
-    base,
-    symbols: target
+    from: base,
+    to: target,
+    amount: 1
   });
 
   return {
@@ -40,15 +34,15 @@ export async function getLatestRate(base, target) {
 }
 
 export async function convertAmount(amount, from, to) {
-  const data = await fetchJson('/convert', {
+  const data = await fetchJson('/latest', {
+    amount,
     from,
-    to,
-    amount
+    to
   });
 
   return {
-    result: data.result,
+    result: data.rates?.[to],
     date: data.date,
-    query: data.query
+    query: { amount, from, to }
   };
 }
