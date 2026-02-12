@@ -1,4 +1,4 @@
-﻿const API_BASE = 'https://api.exchangerate.host';
+const API_BASE = 'https://api.exchangerate.host';
 
 async function fetchJson(path, params = {}) {
   const url = new URL(`${API_BASE}${path}`);

@@ -1,4 +1,4 @@
-﻿# FX Demo (Vite + exchangerate.host)
+# FX Demo (Vite + exchangerate.host)
 
 ## Local development
 
