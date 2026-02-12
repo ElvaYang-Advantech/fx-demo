@@ -1,4 +1,4 @@
-# FX Demo (Vite + Frankfurter API)
+# FX Demo (Vite + open.er-api.com)
 
 ## Local development
 

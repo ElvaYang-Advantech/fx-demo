@@ -15,11 +15,11 @@ const metaEl = document.querySelector('#meta');
 
 function setLoading(loading) {
   convertButton.disabled = loading;
-  convertButton.textContent = loading ? '查詢中...' : '查詢並轉換';
+  convertButton.textContent = loading ? 'Loading...' : 'Convert';
 }
 
 function renderError(message) {
-  resultEl.textContent = `發生錯誤：${message}`;
+  resultEl.textContent = `Error: ${message}`;
   resultEl.classList.add('error');
 }
 
@@ -28,7 +28,7 @@ function clearError() {
 }
 
 function formatCurrency(amount, currency) {
-  return new Intl.NumberFormat('zh-TW', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
     maximumFractionDigits: 4
@@ -37,9 +37,13 @@ function formatCurrency(amount, currency) {
 
 async function loadCurrencies() {
   const symbols = await getSupportedCurrencies();
+  const currencyNames = new Intl.DisplayNames(['en'], { type: 'currency' });
   const entries = Object.entries(symbols)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([code, description]) => ({ code, description }));
+    .map(([code]) => ({
+      code,
+      description: currencyNames.of(code) || code
+    }));
 
   const options = entries
     .map(({ code, description }) => `<option value="${code}">${code} - ${description}</option>`)
@@ -60,7 +64,7 @@ async function runConvert() {
   try {
     const amount = Number(amountInput.value || 0);
     if (!Number.isFinite(amount) || amount < 0) {
-      throw new Error('請輸入有效金額');
+      throw new Error('Please enter a valid amount');
     }
 
     const from = fromSelect.value;
@@ -72,7 +76,7 @@ async function runConvert() {
     ]);
 
     resultEl.textContent = `${formatCurrency(amount, from)} = ${formatCurrency(converted.result, to)}`;
-    metaEl.textContent = `1 ${from} = ${latest.rate} ${to} | 匯率日期：${latest.date}`;
+    metaEl.textContent = `1 ${from} = ${latest.rate} ${to} | Updated: ${latest.date}`;
   } catch (error) {
     renderError(error instanceof Error ? error.message : String(error));
   } finally {
